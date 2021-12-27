@@ -12,11 +12,11 @@ body {
 
 .calc-container {
     width: 400px;
-    height: 500px;
+    height: 400px;
     padding: 8px;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: 1.5fr repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
     grid-gap: 8px;
     border: 2px solid black;
     border-radius: 10px;
@@ -32,19 +32,14 @@ body {
     padding: 8px;
 }
 
-.small-display {
-    font-size: 1.5rem;
-    margin-top: 8px;
-}
-
-.big-display {
+.calc-display div{
+    overflow: hidden;
     font-size: 3rem;
-    margin-bottom: 8px;
     margin-top: auto;
 }
 
 .calc-container button {
-    border-radius: 5px;
+    border-radius: 15px;
     font-size: 1.5rem;
     font-weight: bold;
 }
@@ -55,4 +50,8 @@ body {
 
 .equals-button {
     grid-area: 5/4/6/6;
+}
+
+.active-operator-button {
+    
 }

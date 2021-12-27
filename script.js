@@ -19,9 +19,104 @@ const operate = function(a, b, op) {
         return add(a, b);
     } else if (op === '-') {
         return subtract(a, b);
-    } else if (op === '*') {
+    } else if (op === '×') {
         return multiply(a, b);
-    } else if (op === '/') {
+    } else if (op === '÷') {
+        if (b === 0) return 'Math Error!';
         return divide(a, b);
-    } else return 'Invalid operator';
+    }
 }
+
+function appendNumberToDisplay(number) {
+    displayText = calculatorDisplay.textContent;
+    if (displayingResult || operatorJustSet) {
+        displayText = number;
+        displayingResult = false;
+        operatorJustSet = false;
+    } else {
+        displayText += number;
+    }
+
+    if (activeOperator) {
+        num2 = Number(displayText);
+    } else {
+        num1 = Number(displayText);
+    }
+    calculatorDisplay.textContent = displayText;
+}
+
+function addDotToDisplay() {
+    displayText = calculatorDisplay.textContent;
+    if (!displayText || displayText.includes('.')) return;
+    calculatorDisplay.textContent += '.';
+    displayingResult = false;
+    operatorJustSet = false;
+}
+
+function clearDisplay() {
+    calculatorDisplay.textContent = '';
+    activeOperator = null;
+    num1 = null;
+    num2 = null;
+}
+
+function backspaceDisplay() {
+    displayText = calculatorDisplay.textContent;
+    calculatorDisplay.textContent = displayText.slice(0, displayText.length-1);
+}
+
+function setOperator(operator) {
+    if (num2) evaluateResult();
+    displayText = calculatorDisplay.textContent;
+    if (!displayText) return;
+    activeOperator = document.querySelector(`[data-operator='${operator}']`);
+    operatorJustSet = true;
+}
+
+function evaluateResult() {
+    displayText = calculatorDisplay.textContent;
+    if (!activeOperator || !displayText) return;
+    result = operate(num1, num2, activeOperator.textContent);
+    displayingResult = true;
+    activeOperator = null;
+    num1 = result;
+    num2 = null;
+    calculatorDisplay.textContent = result;
+}
+
+function handleKeyPress(e) {
+    key = e.key;
+    if ('1234567890'.includes(key)) {
+        appendNumberToDisplay(key);
+    } else if ('*/+-'.includes(key)) {
+        setOperator(key);
+    } else if (key === 'Backspace') {
+        backspaceDisplay();
+    } else if (key === 'Escape') {
+        clearDisplay();
+    } else if (key === '=' || key === 'Enter') {
+        evaluateResult();
+    }
+}
+
+const calculatorDisplay = document.querySelector('.calc-display div');
+
+const numberButtons = Array.from(document.querySelectorAll('.number-button'));
+const operatorButtons = Array.from(document.querySelectorAll('.operator-button'));
+const dotButton = document.querySelector('.dot-button');
+const clearButton = document.querySelector('.clear-button');
+const deleteButton = document.querySelector('.delete-button');
+const equalsButton = document.querySelector('.equals-button');
+
+numberButtons.forEach( (button) => button.addEventListener('click', function() {appendNumberToDisplay(this.textContent);}) );
+operatorButtons.forEach( (button) => button.addEventListener('click', function() {setOperator(this.getAttribute('data-operator'));}) );
+dotButton.addEventListener('click', addDotToDisplay);
+clearButton.addEventListener('click', clearDisplay);
+deleteButton.addEventListener('click', backspaceDisplay);
+equalsButton.addEventListener('click', evaluateResult);
+
+window.addEventListener('keydown', handleKeyPress);
+
+let num1, num2, activeOperator;
+let displayingResult = false;
+let operatorJustSet = false;
