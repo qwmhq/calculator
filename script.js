@@ -1,3 +1,24 @@
+let num1, num2, activeOperator;
+let displayingResult = false;
+let operatorJustSet = false;
+
+const calculatorDisplay = document.querySelector('.calc-display div');
+const numberButtons = Array.from(document.querySelectorAll('.number-button'));
+const operatorButtons = Array.from(document.querySelectorAll('.operator-button'));
+const dotButton = document.querySelector('.dot-button');
+const clearButton = document.querySelector('.clear-button');
+const deleteButton = document.querySelector('.delete-button');
+const equalsButton = document.querySelector('.equals-button');
+
+numberButtons.forEach( (button) => button.addEventListener('click', function() {appendNumberToDisplay(this.textContent);}) );
+operatorButtons.forEach( (button) => button.addEventListener('click', function() {setOperator(this.getAttribute('data-operator'));}) );
+dotButton.addEventListener('click', addDotToDisplay);
+clearButton.addEventListener('click', clearDisplay);
+deleteButton.addEventListener('click', backspaceDisplay);
+equalsButton.addEventListener('click', evaluateResult);
+
+window.addEventListener('keydown', handleKeyPress);
+
 const add = function(a, b) {
     return a + b;
 }
@@ -68,7 +89,7 @@ function backspaceDisplay() {
 function setOperator(operator) {
     if (num2) evaluateResult();
     displayText = calculatorDisplay.textContent;
-    if (!displayText) return;
+    if (!displayText || isNaN(Number(displayText))) return;
     activeOperator = document.querySelector(`[data-operator='${operator}']`);
     operatorJustSet = true;
 }
@@ -79,7 +100,7 @@ function evaluateResult() {
     result = operate(num1, num2, activeOperator.textContent);
     displayingResult = true;
     activeOperator = null;
-    num1 = result;
+    num1 = typeof(result) == 'string' ? null : result;
     num2 = null;
     calculatorDisplay.textContent = result;
 }
@@ -96,27 +117,7 @@ function handleKeyPress(e) {
         clearDisplay();
     } else if (key === '=' || key === 'Enter') {
         evaluateResult();
+    } else if (key === '.') {
+        addDotToDisplay();
     }
 }
-
-const calculatorDisplay = document.querySelector('.calc-display div');
-
-const numberButtons = Array.from(document.querySelectorAll('.number-button'));
-const operatorButtons = Array.from(document.querySelectorAll('.operator-button'));
-const dotButton = document.querySelector('.dot-button');
-const clearButton = document.querySelector('.clear-button');
-const deleteButton = document.querySelector('.delete-button');
-const equalsButton = document.querySelector('.equals-button');
-
-numberButtons.forEach( (button) => button.addEventListener('click', function() {appendNumberToDisplay(this.textContent);}) );
-operatorButtons.forEach( (button) => button.addEventListener('click', function() {setOperator(this.getAttribute('data-operator'));}) );
-dotButton.addEventListener('click', addDotToDisplay);
-clearButton.addEventListener('click', clearDisplay);
-deleteButton.addEventListener('click', backspaceDisplay);
-equalsButton.addEventListener('click', evaluateResult);
-
-window.addEventListener('keydown', handleKeyPress);
-
-let num1, num2, activeOperator;
-let displayingResult = false;
-let operatorJustSet = false;
