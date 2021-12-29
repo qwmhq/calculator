@@ -5,10 +5,13 @@ let operatorJustSet = false;
 const calculatorDisplay = document.querySelector('.calc-display div');
 const numberButtons = Array.from(document.querySelectorAll('.number-button'));
 const operatorButtons = Array.from(document.querySelectorAll('.operator-button'));
+const minusButton = document.querySelector('.minus-button');
 const dotButton = document.querySelector('.dot-button');
 const clearButton = document.querySelector('.clear-button');
 const deleteButton = document.querySelector('.delete-button');
 const equalsButton = document.querySelector('.equals-button');
+
+operatorButtons.pop(minusButton);
 
 numberButtons.forEach( (button) => button.addEventListener('click', function() {appendNumberToDisplay(this.textContent);}) );
 operatorButtons.forEach( (button) => button.addEventListener('click', function() {setOperator(this.getAttribute('data-operator'));}) );
@@ -16,6 +19,7 @@ dotButton.addEventListener('click', addDotToDisplay);
 clearButton.addEventListener('click', clearDisplay);
 deleteButton.addEventListener('click', backspaceDisplay);
 equalsButton.addEventListener('click', evaluateResult);
+minusButton.addEventListener('click', minusButtonClick);
 
 window.addEventListener('keydown', handleKeyPress);
 
@@ -105,12 +109,21 @@ function evaluateResult() {
     calculatorDisplay.textContent = result;
 }
 
+function minusButtonClick() {
+    displayText = calculatorDisplay.textContent;
+    if (!displayText || operatorJustSet) {
+        appendNumberToDisplay('-');
+    } else setOperator('-');
+}
+
 function handleKeyPress(e) {
     key = e.key;
     if ('1234567890'.includes(key)) {
         appendNumberToDisplay(key);
-    } else if ('*/+-'.includes(key)) {
+    } else if ('*/+'.includes(key)) {
         setOperator(key);
+    } else if (key === '-') {
+        minusButtonClick();
     } else if (key === 'Backspace') {
         backspaceDisplay();
     } else if (key === 'Escape') {
