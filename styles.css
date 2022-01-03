@@ -18,18 +18,20 @@ body {
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(5, 1fr);
     grid-gap: 8px;
-    border: 2px solid black;
+    border: 2px solid grey;
     border-radius: 10px;
+    background-color: #111;
 }
 
 .calc-display {
     grid-area: 1/1/2/6;
-    border: 2px solid black;
+    border: 2px solid grey;
     border-radius: 10px;
     text-align: right;
     display: flex;
     flex-direction: column;
     padding: 8px;
+    color: #eee;
 }
 
 .calc-display div{
@@ -44,6 +46,21 @@ body {
     font-weight: bold;
 }
 
+.number-button, .dot-button {
+    background-color: #777;
+    color: #eee;
+}
+
+.operator-button, .equals-button {
+    background-color: #faa30c;
+    color: #eee;
+}
+
+.delete-button, .clear-button {
+    background-color: #e0d8d5;
+
+}
+
 .zero-button {
     grid-area: 5/1/6/3;
 }
@@ -53,5 +70,6 @@ body {
 }
 
 .active-operator-button {
-    
+    background-color: #eee;
+    color: #faa30c;
 }

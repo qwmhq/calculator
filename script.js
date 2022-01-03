@@ -80,7 +80,7 @@ function addDotToDisplay() {
 
 function clearDisplay() {
     calculatorDisplay.textContent = '';
-    activeOperator = null;
+    unsetOperator();
     num1 = null;
     num2 = null;
 }
@@ -91,19 +91,27 @@ function backspaceDisplay() {
 }
 
 function setOperator(operator) {
+    if (activeOperator) unsetOperator();
     if (num2) evaluateResult();
     displayText = calculatorDisplay.textContent;
     if (!displayText || isNaN(Number(displayText))) return;
     activeOperator = document.querySelector(`[data-operator='${operator}']`);
+    activeOperator.classList.toggle('active-operator-button');
     operatorJustSet = true;
+}
+
+function unsetOperator() {
+    if (!activeOperator) return;
+    activeOperator.classList.toggle('active-operator-button');
+    activeOperator = null;
 }
 
 function evaluateResult() {
     displayText = calculatorDisplay.textContent;
-    if (!activeOperator || !displayText) return;
+    if (!activeOperator || !displayText || !num2) return;
     result = operate(num1, num2, activeOperator.textContent);
     displayingResult = true;
-    activeOperator = null;
+    unsetOperator();
     num1 = typeof(result) == 'string' ? null : result;
     num2 = null;
     calculatorDisplay.textContent = result;
